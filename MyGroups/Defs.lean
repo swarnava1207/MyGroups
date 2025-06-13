@@ -131,7 +131,7 @@ theorem cancel_right (G : Type u) [MyGroup G] :
     simp [id_prop] at h1
     assumption
 
-noncomputable def order (G : Type u) [MyGroup G] (a : G) : ℕ :=
+noncomputable def order {G : Type u} [MyGroup G] (a : G) : ℕ :=
   if h : ∃ n : ℕ, a^n = 1 then Nat.find h else 0
 
 end MyGroup
