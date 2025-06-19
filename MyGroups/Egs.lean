@@ -1,6 +1,11 @@
 import MyGroups.Defs
 
+universe u
 def neg : ℤ → ℤ := fun n => - n
+
+def Function.id {A : Type u} : A → A := fun a => a
+
+def PermSet (A : Type u) : Set (A → A) := {f : A → A | Function.Bijective f}
 
 instance : MyGroup ℤ where
   op := Int.add
@@ -12,4 +17,5 @@ instance : MyGroup ℤ where
       repeat (first | apply And.intro | simp)
   inv_left_prop := by simp [neg]
   inv_right_prop := by simp [neg]
+
 
