@@ -209,3 +209,24 @@ theorem normalizer_subgroup (G : Type u) [MyGroup G] (H : Set G) :
       rw [← hb]
       rw [left_mul_assoc]
 
+
+def stabilizer_element {G : Type u} [MyGroup G] (A : Type v) [Action G A] (a : A) : Set G :=
+  { g : G | Action.act g a = a }
+
+theorem stabilizer_element_subgroup {G : Type u} [MyGroup G] (A : Type v) [Action G A] (a : A) :
+  SubGroup G (stabilizer_element A a) := by
+    constructor
+    · simp [stabilizer_element]
+      exact id_act a
+    · intro g hg
+      simp [stabilizer_element] at hg
+      simp [stabilizer_element]
+      rw [← hg]
+      rw [← assoc_act]
+      simp [hg, id_act]
+    · intro g h hg hh
+      simp [stabilizer_element] at hg hh
+      simp [stabilizer_element]
+      rw [assoc_act]
+      rw [hh, hg]
+

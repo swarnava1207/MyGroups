@@ -14,7 +14,10 @@ class MyGroup (G : Type u) where
 def MyGroup.pow (G : Type u) [MyGroup G] (a : G) (n : ℕ) : G :=
   if n = 0 then id else op a (MyGroup.pow G a (n - 1))
 
-instance (G : Type u) [MyGroup G] : Mul G where
+def MyGroup.pow_neg (G : Type u) [MyGroup G] (a : G) (n : ℕ) : G :=
+  if n = 0 then id else op (inv a) (MyGroup.pow_neg G a (n - 1))
+
+instance group_mul (G : Type u) [MyGroup G] : Mul G where
   mul := MyGroup.op
 
 instance (G : Type u) [MyGroup G] : One G where
@@ -23,8 +26,13 @@ instance (G : Type u) [MyGroup G] : One G where
 instance (G : Type u) [MyGroup G] : Inv G where
   inv := MyGroup.inv
 
-instance (G : Type u) [MyGroup G] : HPow G ℕ G where
+instance raise_nat (G : Type u) [MyGroup G] : HPow G ℕ G where
   hPow := MyGroup.pow G
+
+-- instance raise_nat_neg (G : Type u) [MyGroup G] : HPow G ℤ G where
+--   hPow := fun a n => if n < 0 then MyGroup.pow_neg G a (-n) else MyGroup.pow G a n
+
+
 namespace MyGroup
 
 @[simp]theorem assoc {G : Type u} [MyGroup G] :
@@ -140,8 +148,5 @@ theorem cancel_right {G : Type u} [MyGroup G] :
     have h3 : 1 * (1:G)⁻¹ = 1 := inv_right (1 : G)
     apply inv_unique (1 : G)
     repeat (first | apply And.intro | assumption)
-
-noncomputable def order {G : Type u} [MyGroup G] (a : G) : ℕ :=
-  if h : ∃ n : ℕ, a^n = 1 then Nat.find h else 0
 
 end MyGroup

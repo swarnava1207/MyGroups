@@ -1,4 +1,8 @@
 import MyGroups.Defs
+import MyGroups.Homs
+import MyGroups.Actions
+import MyGroups.SubGroups
+import MyGroups.Cycles
 
 universe u
 def neg : ℤ → ℤ := fun n => - n
