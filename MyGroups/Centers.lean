@@ -3,7 +3,7 @@ import MyGroups.Actions
 import MyGroups.Homs
 import MyGroups.SubGroups
 
-universe u v
+universe u v w
 open MyGroup
 
 def centralizer (G : Type u) [MyGroup G] (H : Set G) : Set G :=
@@ -59,6 +59,8 @@ instance left_mul_set {G : Type u} [MyGroup G] : HMul G (Set G) (Set G) where
 
 instance right_mul_set {G : Type u} [MyGroup G] : HMul (Set G) G (Set G) where
   hMul := fun H g => { a * g | a ∈ H}
+
+
 
 theorem normal_assoc {G : Type u} [MyGroup G] (g h : G) (H : Set G) :
   g * (H * h) = (g * H) * h := by
@@ -229,4 +231,28 @@ theorem stabilizer_element_subgroup {G : Type u} [MyGroup G] (A : Type v) [Actio
       simp [stabilizer_element]
       rw [assoc_act]
       rw [hh, hg]
+
+def set_mult {G : Type u} (H K : Set G) [MyGroup G] [SubGroup G H] [SubGroup G K] : Set G :=
+  { g : G | ∃ h ∈ H, ∃ k ∈ K, g = h * k }
+
+set_option linter.unusedVariables false
+theorem hom_image_subgroup {G H : Type u} [MyGroup G] [MyGroup H] (f : G → H)  :
+  homo f → SubGroup H (f '' ({ g : G | true})) := by
+      intro h
+      rw [subgrp_iff]
+      constructor
+      · use 1
+        rw [← identity_map f h]
+        simp
+      · intro a b ha hb
+        simp at ha hb
+        let ⟨x, hx⟩ := ha
+        let ⟨y, hy⟩ := hb
+        simp
+        use x * y⁻¹
+        simp [homo] at h
+        simp [h]
+        rw [inverse_map f h]
+        simp [hx,hy]
+set_option linter.unusedVariables true
 
