@@ -2,6 +2,7 @@ import Mathlib
 open Classical
 
 universe u
+
 class MyGroup (G : Type u) where
   op : G → G → G
   id : G
@@ -148,5 +149,25 @@ theorem cancel_right {G : Type u} [MyGroup G] :
     have h3 : 1 * (1:G)⁻¹ = 1 := inv_right (1 : G)
     apply inv_unique (1 : G)
     repeat (first | apply And.intro | assumption)
+
+
+instance cartesian_prod (G : Type u) (H : Type u) [MyGroup G] [MyGroup H] : MyGroup (G × H) where
+  op := fun p q => (p.1 * q.1, p.2 * q.2)
+  id := (1, 1)
+  inv := fun p => (p.1⁻¹, p.2⁻¹)
+  associativity := by
+    intros a b c
+    simp
+  id_proposition := by
+    intro a
+    simp
+  inv_left_prop := by
+    intro a
+    simp
+  inv_right_prop := by
+    intro a
+    simp
+
+
 
 end MyGroup

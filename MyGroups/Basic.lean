@@ -13,3 +13,4 @@ def hello := "world"
 #print Nat.gcd
 #print Nat.find
 #print Nat.mul_div_cancel_left
+#print HasQuotient
