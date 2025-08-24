@@ -96,7 +96,7 @@ theorem inv_unique {G : Type u} [MyGroup G] :
     apply inv_unique
     repeat (first | apply And.intro | assumption)
 
-theorem inv_of_prod {G : Type u} [MyGroup G] :
+@[simp]theorem inv_of_prod {G : Type u} [MyGroup G] :
   ∀ a b : G, (a * b)⁻¹ = b ⁻¹ * a⁻¹ := by
     intro a b
     have h1 : (b⁻¹ * a⁻¹) * (a * b) = 1 := by

@@ -2,7 +2,7 @@ import MyGroups.Defs
 import MyGroups.Actions
 import MyGroups.Homs
 
-universe u
+universe u v
 namespace MyGroup
 
 
@@ -77,11 +77,22 @@ theorem subgrp_iff (G : Type u) [MyGroup G] (H : Set G) :
         apply h.2 <;> assumption
 
 
-
-
-
-
-
+instance product_group {G : Type u} {H : Type v} [MyGroup G] [MyGroup H] : MyGroup (G × H) where
+  op := fun a b => (a.1 * b.1, a.2 * b.2)
+  id := (1, 1)
+  inv := fun a => (a.1⁻¹, a.2⁻¹)
+  associativity := by
+    intro a b c
+    simp
+  id_proposition := by
+    intro a
+    simp
+  inv_left_prop := by
+    intro a
+    simp
+  inv_right_prop := by
+    intro a
+    simp
 
 
 

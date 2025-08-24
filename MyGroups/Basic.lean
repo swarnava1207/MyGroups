@@ -13,4 +13,13 @@ def hello := "world"
 #print Nat.gcd
 #print Nat.find
 #print Nat.mul_div_cancel_left
-#print HasQuotient
+#print Quot
+#print Quotient
+#print Setoid
+#print Equivalence
+
+structure Mypoint where
+  x : Nat
+  y : Nat
+
+example : Mypoint := { x := 1, y := 2 }

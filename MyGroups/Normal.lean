@@ -37,8 +37,39 @@ theorem normal_normalizer (G : Type u) [MyGroup G] (H : Set G) [SubGroup G H] :
 
 def left_coset_set {G : Type u} [MyGroup G] (H : Set G) : Set (Set G) := { g * H | g : G }
 
-instance quotient_normal (G : Type u) [MyGroup G] (H : Set G) [SubGroup G H] (h : normal G H) :
-  HasQuotient G H where
-    quotient' := sorry
+def eqv_rel {G : Type u} [MyGroup G] (H : Set G) [SubGroup G H] : G → G → Prop :=
+  fun a b => b⁻¹ * a ∈ H
 
--- instance coset_group (G : Type u) [MyGroup G] (H : Set G) [SubGroup G H] (h : normal G H) : MyGroup (left_coset_set H) where
+def eqv_rel_setoid {G : Type u} [MyGroup G] (H : Set G) [SubGroup G H] : Setoid G where
+  r := eqv_rel H
+  iseqv :=
+    {refl := by
+             intro x
+             simp [eqv_rel]
+             exact sub_group_id ,
+     symm := by
+             intro x y h
+             simp [eqv_rel] at h
+             have h1 : x ⁻¹ * y ∈ H := by
+                let a := y ⁻¹ * x
+                have ha : a ∈ H := h
+                have h2 : a⁻¹ = x⁻¹ * y := by rw [inv_of_prod, inv_of_inv]
+                rw [← h2]
+                exact sub_group_inv a ha
+             simp [eqv_rel]
+             assumption ,
+     trans := by
+              intro x y z hxy hyz
+              simp [eqv_rel] at hxy hyz
+              simp [eqv_rel]
+              have h1 : z⁻¹ * x = (z⁻¹ * y) * (y⁻¹ * x) := by
+                simp
+                rw [← assoc y y⁻¹ x]
+                simp
+              rw [h1]
+              exact sub_group_mul (z⁻¹ * y) (y⁻¹ * x) hyz hxy}
+
+
+def left_coset_quotient {G : Type u} [MyGroup G] (H : Set G) [SubGroup G H] : Type u :=
+  Quotient (eqv_rel_setoid H)
+
